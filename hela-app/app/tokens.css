@@ -1,0 +1,157 @@
+/* ============================================================
+   tokens.css — HELA (ПРЕДВАРИТЕЛЬНАЯ версия, v0.1)
+   Источник: Figma «DE», секция «App» (498:2353), 8 экранов 390×984.
+   Собрано автоматически по реальным значениям макета (не по гайду).
+   Слои: primitives (--p-*) → semantic. В компонентах и прототипах
+   используем ТОЛЬКО semantic. Спорные места: см. TOKENS_AUDIT.md.
+   Все спорные места закрыты, решения записаны в ui-pipeline/TOKENS_AUDIT.md.
+   Файл лежит в hela-app/app/tokens.css и импортируется из globals.css (единственный источник).
+   Имена blur/round/font выбраны так, чтобы не пересекаться с темой Tailwind v4
+   (--blur-*, --radius-*, --font-sans). Имена классов Tailwind: см. tokens-tailwind.css.
+   Не входит сюда: системный хром Telegram/iOS (шапка mini-app,
+   статус-бар, Modal Stack, SF Pro, Roboto) — это не дизайн Hela.
+   ============================================================ */
+
+:root {
+  /* ---------- PRIMITIVES: цвет ---------- */
+  --p-white: #ffffff;
+  --p-neutral-950: #111111;
+  --p-neutral-900: #1e1e1e;
+  --p-neutral-700: #494949;
+  --p-neutral-500: #8e8e93;
+  --p-neutral-300: #d1d1d6;
+
+  --p-purple-950: #160022;
+  --p-purple-900: #1a0831;
+  --p-purple-700: #502ea1;
+  --p-purple-600: #411e93;
+  --p-purple-400: #9061ff;
+
+  --p-yellow-300: #ffe600;
+  --p-yellow-500: #fdca00;
+  --p-yellow-600: #f2aa1a;
+  --p-orange-500: #ff9500;
+  --p-orange-600: #ff8a00;
+  --p-orange-700: #fd5900;
+  --p-green-500: #00ff40;
+
+  --p-neutral-400: #999999;                /* только как стоп градиентов */
+  --p-neutral-200: #cfcfcf;
+  --p-purple-500: #7855ca;
+  --p-violet-500: #824eff;
+  --p-yellow-400: #f7c401;
+  --p-amber-800: #974c00;
+  --p-green-300: #87ff7f;
+  --p-green-700: #087900;
+  --p-green-800: #009926;
+
+  /* ---------- SEMANTIC: поверхности ---------- */
+  --bg-app: var(--p-neutral-950);          /* онбординг, 4 экрана полноэкранно */
+  --bg-hero: var(--p-purple-900);          /* герой-блок 390×440 */
+  --bg-hero-deep: var(--p-purple-950);     /* карточка героя на главном */
+  --bg-marquee: var(--p-neutral-900);      /* лента hela.bet, обычное состояние */
+  --bg-marquee-promo: var(--p-orange-600); /* лента, промо-состояние */
+  --surface-glass: rgb(255 255 255 / 0.10);        /* чипы, мелкие плашки */
+  --surface-glass-strong: rgb(255 255 255 / 0.12); /* карточки; оба значения (0.10 и 0.12) оставлены осознанно */
+  --surface-tabbar-tint: rgb(65 30 147 / 0.40);    /* подложка таббара */
+  --surface-tab-active: rgb(120 85 202 / 0.20);    /* активный пункт таббара */
+  --gradient-card: linear-gradient(180deg, rgb(255 255 255 / 0.12) 0%, rgb(207 207 207 / 0.12) 47%, rgb(153 153 153 / 0.12) 100%); /* карточки Career и Stats */
+  --scrim-bottom: linear-gradient(180deg, rgb(0 0 0 / 0) 0%, rgb(0 0 0 / 0.40) 100%);
+
+  /* ---------- SEMANTIC: текст ---------- */
+  --text-primary: var(--p-white);
+  --text-secondary: var(--p-neutral-500);  /* единственный вторичный серый Hela; #aaaaaa = подпись «mini app» в шапке Telegram (хром) */
+  --text-accent: var(--p-yellow-500);
+  --text-success: var(--p-green-500);
+
+  /* ---------- SEMANTIC: действия и акценты ---------- */
+  --action-primary: var(--p-purple-700);   /* основная CTA (Get Started, Go to Bets) */
+  --action-promo: var(--p-orange-500);     /* промо-CTA (Allow messages, 2X Boost) */
+  --accent-gold: var(--p-yellow-500);      /* монеты, активные точки, звёзды, рамки */
+  --glow-purple: var(--p-purple-400);      /* свечение за маскотом */
+  --gradient-gold: linear-gradient(180deg, var(--p-yellow-500) 0%, var(--p-yellow-600) 100%); /* чип с монетой, 180° проверен */
+  --gradient-star: linear-gradient(180deg, var(--p-yellow-300) 0%, var(--p-orange-600) 100%); /* заливка звёзд рейтинга, 21 исп.; угол 180° проверен по макету */
+  --gradient-success-chip: linear-gradient(90deg, rgb(0 255 64 / 0.20) 0%, rgb(0 153 38 / 0.20) 100%); /* фон чипа «Top 12%…» */
+  --gradient-heading: linear-gradient(90deg, var(--p-white) 0%, var(--p-neutral-400) 100%);            /* заливка текста заголовков 34/700 */
+  --gradient-progress: linear-gradient(90deg, var(--p-violet-500) 0%, var(--p-yellow-400) 100%);       /* заливка прогресс-бара */
+  --gradient-tile-green: linear-gradient(180deg, rgb(135 255 127 / 0.20) 0%, rgb(8 121 0 / 0.20) 100%); /* плитка Invite & Earn */
+  --gradient-tile-gold: linear-gradient(180deg, var(--p-yellow-500) 0%, var(--p-amber-800) 100%);      /* плитка Daily Reward */
+
+  /* ---------- SEMANTIC: состояния элементов ---------- */
+  --star-inactive: var(--p-neutral-700);
+  --dot-inactive: var(--p-neutral-300);
+  --dot-active: var(--accent-gold);        /* в Halloween активная точка оранжевая (сезонный вариант, принято) */
+  --progress-track: rgb(120 120 120 / 0.20);
+
+  /* ---------- SEMANTIC: границы (всегда 1px) ---------- */
+  --border-default: rgb(255 255 255 / 0.30);
+  --border-strong: var(--p-white);
+  --border-accent: var(--accent-gold);
+  --border-width: 1px;
+
+  /* ---------- Отступы: шаг 4px + полушаги 2/6/10 (6 и 10 часто в макете) ---------- */
+  --space-2xs: 2px;
+  --space-xs: 4px;
+  --space-sm: 6px;
+  --space-md: 8px;
+  --space-lg: 10px;
+  --space-xl: 12px;
+  --space-2xl: 16px;
+  --space-3xl: 20px;
+  --space-4xl: 24px;
+  --space-5xl: 32px;
+  --screen-gutter: 20px;                   /* боковые поля; в макете контент 350 из 390 */
+
+  /* ---------- Радиусы ---------- */
+  --round-4: 4px;
+  --round-8: 8px;
+  --round-card: 24px;                     /* карточки 350×88/111/155/92, плитки 180×100 (14 исп.) */
+  --round-32: 32px;
+  --round-full: 999px;                    /* чипы h30 (в макете 15), точки 24×8 (12), CTA и круги (1000/999/888) — всё пилюли */
+
+  /* ---------- Типографика ---------- */
+  --font-ui: var(--font-sans, "Plus Jakarta Sans"), system-ui, -apple-system, sans-serif; /* --font-sans задаёт next/font в layout.tsx */
+
+  --fs-11: 11px;
+  --fs-12: 12px;
+  --fs-13: 13px;
+  --fs-14: 14px;
+  --fs-15: 15px;
+  --fs-16: 16px;
+  --fs-17: 17px;
+  --fs-24: 24px;
+  --fs-32: 32px;                           /* цифры в карточке статистики */
+  --fs-34: 34px;
+  --fs-64: 64px;
+
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+
+  --lh-auto: normal;                       /* в макете почти везде «auto» */
+  --ls-caps: 0.5px;                        /* метки вроде YOUR CAREER (11/600) */
+
+  /* ---------- Размеры компонентов (из макета) ---------- */
+  --button-h: 50px;                        /* решено: 50 (в макете CTA из библиотечного компонента 351×51) */
+  --chip-h: 30px;
+  --tabbar-w: 260px;
+  --tabbar-h: 74px;
+  --dot-size: 8px;
+  --progress-h: 4px;
+
+  /* ---------- Размытие и свечение ---------- */
+  /* Значения в CSS px = радиус блюра в Figma / 2 (Figma 20 = CSS blur(10px)); проверено сверкой с макетом. */
+  --glass-blur-sm: 5px;                          /* Figma BACKGROUND_BLUR 10 */
+  --glass-blur-md: 10px;                         /* Figma BACKGROUND_BLUR 20, 15 исп. */
+  --glass-blur-lg: 25px;                         /* Figma BACKGROUND_BLUR 50, 10 исп. */
+  --glow-blur-sm: 25px;                          /* Figma LAYER_BLUR 50 */
+  --glow-blur-md: 50px;                          /* Figma LAYER_BLUR 100 */
+  --glow-blur-lg: 100px;                         /* Figma LAYER_BLUR 200 для свечений, 12 исп. */
+
+  /* ---------- Тени ---------- */
+  --shadow-soft: 0 8px 15px rgb(0 0 0 / 0.02), 0 10px 30px rgb(0 0 0 / 0.06); /* едва заметны; оставлена */
+
+  /* ---------- Layout ---------- */
+  --screen-w: 390px;                       /* ширина РАМКИ МАКЕТА (для превью/симулятора); в приложении ширина гибкая */
+}

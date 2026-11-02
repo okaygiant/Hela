@@ -1,9 +1,19 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono, Inter } from "next/font/google";
+import Script from "next/script";
+import { Geist, Geist_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import { TelegramProvider } from "@/components/telegram-provider";
 
-const inter = Inter({subsets:['latin'],variable:'--font-sans'});
+// Шрифт лежит в проекте (не качается с Google): грузится всегда, в том числе в Telegram.
+const plusJakarta = localFont({
+  src: "./fonts/PlusJakartaSans-latin-variable.woff2",
+  variable: "--font-sans",
+  weight: "200 800",
+  display: "swap",
+  fallback: ["system-ui", "-apple-system", "sans-serif"],
+});
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,9 +44,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={cn("h-full", "antialiased", geistSans.variable, geistMono.variable, "font-sans", inter.variable)}
+      className={cn("h-full", "antialiased", geistSans.variable, geistMono.variable, "font-sans", plusJakarta.variable)}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        {children}
+        <TelegramProvider />
+        <Script src="https://telegram.org/js/telegram-web-app.js" strategy="beforeInteractive" />
+      </body>
     </html>
   );
 }
