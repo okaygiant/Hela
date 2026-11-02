@@ -1,14 +1,18 @@
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
-import { Geist, Geist_Mono, Plus_Jakarta_Sans } from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { TelegramProvider } from "@/components/telegram-provider";
 
-const plusJakarta = Plus_Jakarta_Sans({
-  subsets: ['latin'],
-  variable: '--font-sans',
-  weight: ['400', '500', '600', '700'],
+// Шрифт лежит в проекте (не качается с Google): грузится всегда, в том числе в Telegram.
+const plusJakarta = localFont({
+  src: "./fonts/PlusJakartaSans-latin-variable.woff2",
+  variable: "--font-sans",
+  weight: "200 800",
+  display: "swap",
+  fallback: ["system-ui", "-apple-system", "sans-serif"],
 });
 
 const geistSans = Geist({
