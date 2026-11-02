@@ -216,7 +216,7 @@ export default function IOSNativeHome({ fakeStatusBar = false, hideNavBar = fals
           width: auto;
           height: 48px;
           padding: 0 1.4em;
-          font-family: "SF Pro Display", "Inter", sans-serif;
+          font-family: "SF Pro Display", var(--font-sans), sans-serif;
           font-size: 15px;
           font-weight: 600;
           letter-spacing: -0.3px;

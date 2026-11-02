@@ -1,336 +1,270 @@
-"use client"
-import { useState } from "react"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Progress } from "@/components/ui/progress"
-import { Separator } from "@/components/ui/separator"
+import Image from "next/image"
 
-const CIRCLE_R = 80
-const CIRCLE_C = parseFloat((2 * Math.PI * CIRCLE_R).toFixed(2))
-const arcOffset = CIRCLE_C * (1 - 280 / 500)
+// Источник: Figma «DE» → Home (498:2354), референс ui-pipeline/refs/01-home.png.
+// Правила: ui-pipeline/UI_RULES.md. Только токены и классы из tokens-tailwind.css.
 
-const STREAK_DAYS   = ["M", "T", "W", "T", "F", "S", "S"]
-const STREAK_FILLED = 3
+const STREAK_DAYS = 3
+const WEEK = ["M", "T", "W", "T", "F", "S", "S"]
+const XP = 78
+const XP_MAX = 200
 
-const ACTIONS = [
-  { emoji: "💼", label: "Work", status: "2 shifts open" },
-  { emoji: "⚽", label: "Bet",  status: "Match in 3h"   },
-  { emoji: "🎰", label: "Play", status: "Jackpot 500"   },
+const TABS = [
+  { label: "Work", icon: "/helabet/icons/tab-work.webp", w: 160, h: 141, active: true },
+  { label: "Bet", icon: "/helabet/icons/tab-bet.webp", w: 160, h: 157, active: false },
+  { label: "Play", icon: "/helabet/icons/tab-play.webp", w: 160, h: 160, active: false },
 ]
 
-const PROMO_CARDS = [
-  { title: "Invite & Earn", sub: "Up to HC 1,000", btn: "Get started", primary: true  },
-  { title: "Daily Rewards", sub: "0/3 claimed",    btn: "Claim",       primary: true  },
-  { title: "Win Bank",      sub: "2/5 bets",       btn: "Spin 🎰",     primary: false },
+// Кроп картинки плитки (в процентах от плитки), снят с макета.
+const TILES = [
+  {
+    title: "Invite & Earn",
+    caption: "Earn up to 500",
+    src: "/helabet/giraffe-hero.png",
+    fill: "bg-gradient-tile-green",
+    top: "-18%",
+  },
+  {
+    title: "Daily Reward",
+    caption: "Claim your rewards",
+    src: "/helabet/daily-reward.png",
+    fill: "bg-gradient-tile-gold",
+    top: "-16%",
+  },
 ]
 
-const TRANSACTIONS = [
-  { emoji: "💼", title: "Ball crew shift", time: "12:05  Oct 22", amount: "+HC 20"  },
-  { emoji: "💼", title: "Shift payment",   time: "12:04  Oct 22", amount: "+HC 260" },
-  { emoji: "🎮", title: "Casino payout",   time: "3:46  Oct 20",  amount: "+HC 25"  },
-]
-
-const TAB_ITEMS = [
-  { emoji: "💼", label: "Work" },
-  { emoji: "⚽", label: "Bet"  },
-  { emoji: "🎰", label: "Play" },
-  { emoji: "···", label: "More" },
-]
-
-// Dark iOS palette
-const C = {
-  bg:         "#000000",
-  frame:      "#1C1C1E",
-  card:       "#2C2C2E",
-  elevated:   "#3A3A3C",
-  border:     "rgba(255,255,255,0.10)",
-  text:       "#FFFFFF",
-  textSub:    "#8E8E93",
-  textMuted:  "#48484A",
-  tabPill:    "#1C1C1E",
-  tabActive:  "rgba(255,255,255,0.13)",
-  accent:     "#FFFFFF",
+function Chip({ className = "", children }: { className?: string; children: React.ReactNode }) {
+  return (
+    <div
+      className={`flex h-chip items-center rounded-full bg-surface-glass px-3 text-12 font-semibold text-fg-primary ${className}`}
+    >
+      {children}
+    </div>
+  )
 }
 
-export default function HomePage() {
-  const [activeTab, setActiveTab] = useState(0)
-  const [menuOpen, setMenuOpen] = useState(false)
-
+function ChevronRight() {
   return (
-    <div style={{ minHeight: "100vh", display: "flex", justifyContent: "center", alignItems: "flex-start", background: C.bg, paddingTop: 32, paddingBottom: 32 }}>
-      {/* Phone frame — iPhone 16 390×844 */}
-      <div style={{
-        position: "relative", display: "flex", flexDirection: "column",
-        width: 390, height: 844, borderRadius: 44, overflow: "hidden",
-        background: C.frame,
-        boxShadow: "0 40px 100px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.08)",
-      }}>
+    <svg aria-hidden viewBox="0 0 16 16" fill="none" className="size-4 shrink-0 text-fg-primary">
+      <path d="M6 3l5 5-5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
+}
 
-        {/* TOP BAR */}
-        <div style={{ display: "flex", alignItems: "center", padding: "14px 16px 4px", gap: 8, flexShrink: 0 }}>
-          <Avatar className="size-9">
-            <AvatarFallback style={{ background: C.elevated, color: C.text, fontWeight: 700, fontSize: 14 }}>S</AvatarFallback>
-          </Avatar>
-          <div style={{ flex: 1, display: "flex", justifyContent: "center" }}>
-            <span style={{ fontWeight: 600, fontSize: 14, color: C.text }}>🔥 3 days  ›</span>
-          </div>
-          <span style={{ fontWeight: 700, fontSize: 15, color: C.text }}>HC 280</span>
-        </div>
+function MenuIcon() {
+  return (
+    <svg aria-hidden viewBox="0 0 16 16" fill="currentColor" className="size-4">
+      <rect x="2" y="3" width="8" height="1.3" rx="0.65" />
+      <rect x="2" y="7.4" width="12" height="1.3" rx="0.65" />
+      <rect x="2" y="11.8" width="12" height="1.3" rx="0.65" />
+    </svg>
+  )
+}
 
-        {/* SCROLLABLE BODY */}
-        <div style={{ flex: 1, overflowY: menuOpen ? "hidden" : "auto", scrollbarWidth: "none", position: "relative" }}>
-
-          {/* Dim overlay when menu open */}
-          {menuOpen && (
-            <div
-              onClick={() => setMenuOpen(false)}
-              style={{
-                position: "absolute", inset: 0, zIndex: 10,
-                background: "rgba(0,0,0,0.72)",
-                backdropFilter: "blur(2px)",
-                WebkitBackdropFilter: "blur(2px)",
-              }}
-            />
-          )}
-
-          {/* CIRCULAR PROGRESS */}
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", paddingTop: 12, paddingBottom: 12 }}>
-            <div style={{ position: "relative", width: 190, height: 190 }}>
-              <svg width="190" height="190" viewBox="0 0 190 190" style={{ transform: "rotate(-90deg)" }}>
-                <circle cx="95" cy="95" r={CIRCLE_R} fill={C.card} stroke={C.border} strokeWidth="10" />
-                <circle
-                  cx="95" cy="95" r={CIRCLE_R}
-                  fill="none" stroke={C.accent} strokeWidth="10" strokeLinecap="round"
-                  strokeDasharray={CIRCLE_C} strokeDashoffset={arcOffset}
+export default function Home() {
+  return (
+    <main className="min-h-app bg-surface-hero pl-safe-left pr-safe-right pt-safe-top pb-safe-bottom text-fg-primary leading-auto">
+      <div className="mx-auto flex max-w-md flex-col gap-3 px-gutter pt-2 pb-28">
+        {/* Шапка: баланс, стрик, язык и меню */}
+        <header className="flex h-8 items-center">
+          <div className="flex flex-1 items-center gap-2.5">
+            <div className="relative size-8 shrink-0">
+              <div className="relative size-8 overflow-hidden rounded-full bg-accent-gold">
+                <Image
+                  src="/helabet/giraffe-main.png"
+                  alt=""
+                  width={941}
+                  height={1671}
+                  sizes="80px"
+                  className="absolute top-0 max-w-none"
+                  style={{ width: "239%", left: "-82%", height: "auto" }}
                 />
-              </svg>
-              <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 2, pointerEvents: "none" }}>
-                <span style={{ fontSize: 11, color: C.textSub }}>HC today</span>
-                <span style={{ fontSize: 52, fontWeight: 700, color: C.text, lineHeight: 1 }}>280</span>
-                <span style={{ fontSize: 11, color: C.textSub }}>Daily goal: 500 HC</span>
+              </div>
+              <Image
+                src="/helabet/icons/coin.webp"
+                alt=""
+                width={160}
+                height={160}
+                sizes="16px"
+                className="absolute top-4 left-6 size-4"
+              />
+            </div>
+            <span className="text-14 font-bold text-fg-accent">999,99</span>
+          </div>
+
+          <Chip className="gap-1.5">
+            <Image src="/helabet/icons/flame.webp" alt="" width={139} height={160} sizes="16px" className="h-3 w-auto" />
+            3 days
+          </Chip>
+
+          <div className="flex flex-1 items-center justify-end gap-2">
+            <button
+              type="button"
+              aria-label="Language: Brazil"
+              className="relative flex size-chip items-center justify-center rounded-full bg-surface-glass after:absolute after:-inset-2"
+            >
+              <span aria-hidden className="text-16 leading-none">
+                🇧🇷
+              </span>
+            </button>
+            <button
+              type="button"
+              aria-label="Menu"
+              className="relative flex size-chip items-center justify-center rounded-full bg-surface-glass text-fg-primary after:absolute after:-inset-2"
+            >
+              <MenuIcon />
+            </button>
+          </div>
+        </header>
+
+        {/* Hero */}
+        <section className="relative h-75 overflow-hidden rounded-32 bg-surface-hero-deep">
+          <Image
+            src="/helabet/home-hero.webp"
+            alt="Giraffe in sunglasses and a suit"
+            fill
+            preload
+            sizes="(max-width: 448px) 100vw, 448px"
+            className="object-cover"
+          />
+          <div className="absolute inset-x-0 bottom-0 h-20 bg-scrim-bottom backdrop-blur-glass-md mask-t-from-40%" />
+          <div className="absolute inset-x-0 bottom-3 flex items-center justify-between px-3">
+            <Chip className="gap-2.5">
+              <span>Rank bonus</span>
+              <span className="text-fg-accent">×1.15</span>
+            </Chip>
+            <Chip className="gap-1.5">
+              <Image src="/helabet/icons/lightning.webp" alt="" width={129} height={160} sizes="16px" className="h-3 w-auto" />
+              LVL 10
+            </Chip>
+          </div>
+        </section>
+
+        {/* CTA */}
+        <button
+          type="button"
+          className="h-button w-full rounded-full bg-action-primary px-5 text-17 font-medium text-fg-primary"
+        >
+          Activate 2X Boost
+        </button>
+
+        {/* Streak Calendar */}
+        <section className="relative isolate flex flex-col gap-4 overflow-hidden rounded-card bg-surface-glass-strong p-4">
+          <div aria-hidden className="pointer-events-none absolute -top-6 left-12 -z-10 h-5 w-64 rounded-full bg-accent-gold blur-glow-sm" />
+          <div aria-hidden className="pointer-events-none absolute -top-6 left-12 -z-10 h-5 w-64 rounded-full bg-accent-gold blur-glow-sm" />
+          <h2 className="text-15 font-semibold text-fg-primary">Streak Calendar</h2>
+          <div className="flex justify-between">
+            {WEEK.map((letter, i) => {
+              const done = i < STREAK_DAYS
+              const nextDone = i + 1 < STREAK_DAYS
+              return (
+                <div key={i} className="flex flex-col items-center gap-1">
+                  <div
+                    className={`relative flex size-chip items-center justify-center rounded-full ${
+                      done ? "bg-gradient-gold" : "bg-surface-glass"
+                    }`}
+                  >
+                    {done && (
+                      <Image src="/helabet/icons/flame.webp" alt="" width={139} height={160} sizes="24px" className="h-5 w-auto" />
+                    )}
+                    {nextDone && <span aria-hidden className="absolute top-1/2 left-full ml-1 h-px w-2 bg-accent-gold" />}
+                  </div>
+                  <span className={`text-11 font-semibold ${done ? "text-fg-primary" : "text-fg-secondary"}`}>
+                    {letter}
+                    {done && <span className="sr-only"> completed</span>}
+                  </span>
+                </div>
+              )
+            })}
+          </div>
+        </section>
+
+        {/* Career */}
+        <section className="flex flex-col gap-3 rounded-card bg-gradient-card p-4">
+          <div className="flex items-start justify-between gap-2.5">
+            <div className="flex flex-col gap-1">
+              <p className="text-11 font-semibold tracking-caps text-fg-secondary uppercase">Your career</p>
+              <div className="flex items-center gap-2">
+                <h2 className="text-24 font-bold text-fg-primary">Runner</h2>
+                <Chip className="gap-1.5">
+                  <Image src="/helabet/icons/lightning.webp" alt="" width={129} height={160} sizes="16px" className="h-3 w-auto" />
+                  LVL 10
+                </Chip>
               </div>
             </div>
-            <Button style={{
-              marginTop: 12, borderRadius: 50, background: C.elevated, color: C.text,
-              fontSize: 13, fontWeight: 600, height: 40, paddingLeft: 24, paddingRight: 24,
-              border: `0.5px solid ${C.border}`, boxShadow: "none",
-            }}>
-              ⚡ Activate 2X Boost
-            </Button>
+            <ChevronRight />
           </div>
 
-          {/* STREAK CARD */}
-          <div style={{ padding: "0 16px 12px" }}>
-            <Card style={{ background: C.card, border: `0.5px solid ${C.border}`, borderRadius: 14 }}>
-              <CardContent style={{ display: "flex", alignItems: "center", gap: 8, padding: "0 12px", height: 52 }}>
-                <span style={{ fontWeight: 600, fontSize: 14, color: C.text, flex: 1 }}>🔥 3-day streak</span>
-                <div style={{ display: "flex", gap: 3 }}>
-                  {STREAK_DAYS.map((day, i) => {
-                    const filled  = i < STREAK_FILLED
-                    const isToday = i === STREAK_FILLED
-                    return (
-                      <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
-                        <div style={{
-                          width: 22, height: 22, borderRadius: 11, flexShrink: 0,
-                          background: filled ? C.text : isToday ? "transparent" : C.elevated,
-                          border: isToday ? `2px solid ${C.text}` : "none",
-                        }} />
-                        <span style={{ fontSize: 8, color: C.textSub }}>{day}</span>
-                      </div>
-                    )
-                  })}
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* CAREER CARD */}
-          <div style={{ padding: "0 16px 12px" }}>
-            <Card style={{ background: C.card, border: `0.5px solid ${C.border}`, borderRadius: 14 }}>
-              <CardContent style={{ paddingTop: 10, paddingBottom: 14, paddingLeft: 12, paddingRight: 12 }}>
-                <p style={{ fontSize: 10, fontWeight: 700, color: C.textSub, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 4 }}>Your Career</p>
-                <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
-                  <span style={{ fontSize: 26, fontWeight: 700, color: C.text }}>Runner</span>
-                  <Badge style={{ background: C.elevated, color: C.textSub, border: "none", borderRadius: 10, fontSize: 11, fontWeight: 600, padding: "2px 10px", height: 24 }}>LVL 01</Badge>
-                </div>
-                <Progress
-                  value={39}
-                  className="[&_[data-slot=progress-track]]:h-[4px] [&_[data-slot=progress-track]]:bg-white/10 [&_[data-slot=progress-indicator]]:bg-white [&_[data-slot=progress-indicator]]:rounded-full"
-                />
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* ACTIONS CARD */}
-          <div style={{ padding: "0 16px 12px" }}>
-            <Card style={{ background: C.card, border: `0.5px solid ${C.border}`, borderRadius: 18, overflow: "hidden" }}>
-              <CardContent style={{ padding: 0 }}>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", height: 90 }}>
-                  {ACTIONS.map((a, i) => (
-                    <div key={a.label} style={{ position: "relative", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 4 }}>
-                      {i > 0 && <div style={{ position: "absolute", left: 0, top: 16, bottom: 16, width: 0.5, background: C.border }} />}
-                      <span style={{ fontSize: 28 }}>{a.emoji}</span>
-                      <span style={{ fontSize: 12, fontWeight: 600, color: C.text }}>{a.label}</span>
-                      <span style={{ fontSize: 9, color: C.textSub }}>{a.status}</span>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* PROMO CARDS */}
-          <div style={{ display: "flex", gap: 10, padding: "0 16px 12px" }}>
-            {PROMO_CARDS.map((card) => (
-              <Card key={card.title} style={{ flex: 1, background: C.card, border: `0.5px solid ${C.border}`, borderRadius: 14, overflow: "hidden", height: 118 }}>
-                <CardContent style={{ display: "flex", flexDirection: "column", height: "100%", padding: 0, paddingTop: 10, paddingLeft: 10, paddingRight: 10, paddingBottom: 10 }}>
-                  <p style={{ fontSize: 12, fontWeight: 700, color: C.text, lineHeight: 1.2 }}>{card.title}</p>
-                  <p style={{ fontSize: 10, color: C.textSub, marginTop: 2 }}>{card.sub}</p>
-                  <div style={{ flex: 1 }} />
-                  <Button style={{
-                    width: "100%", borderRadius: 50, fontSize: 12, fontWeight: 700, height: 36, border: "none",
-                    background: card.primary ? C.text : C.elevated,
-                    color: card.primary ? C.frame : C.text,
-                    boxShadow: "none",
-                  }}>
-                    {card.btn}
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-
-          {/* BALANCE HISTORY */}
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "0 16px 8px" }}>
-            <span style={{ fontSize: 18, fontWeight: 700, color: C.text }}>Balance history</span>
-            <span style={{ fontSize: 12, fontWeight: 600, color: C.textSub }}>Load more</span>
-          </div>
-          <div style={{ padding: "0 16px 16px" }}>
-            <Card style={{ background: C.card, border: `0.5px solid ${C.border}`, borderRadius: 14, overflow: "hidden" }}>
-              <CardContent style={{ padding: 0 }}>
-                {TRANSACTIONS.map((tx, i) => (
-                  <div key={i}>
-                    {i > 0 && <Separator style={{ background: C.border }} />}
-                    <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 12px" }}>
-                      <div style={{ width: 36, height: 36, borderRadius: 10, background: C.elevated, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, flexShrink: 0 }}>
-                        {tx.emoji}
-                      </div>
-                      <div style={{ flex: 1, minWidth: 0 }}>
-                        <p style={{ fontSize: 12, fontWeight: 600, color: C.text }}>{tx.title}</p>
-                        <p style={{ fontSize: 10, color: C.textSub }}>{tx.time}</p>
-                      </div>
-                      <span style={{ fontSize: 13, fontWeight: 700, color: C.text, flexShrink: 0 }}>{tx.amount}</span>
-                    </div>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
-          </div>
-
-        </div>
-
-        {/* STAGGERED VERTICAL MENU — slides in from right on button tap */}
-        <div style={{ flexShrink: 0, position: "relative" }}>
-
-          {/* Expanded list overlay — positioned above the trigger button */}
-          {menuOpen && (
-            <div style={{
-              position: "absolute", bottom: "100%", left: 0, right: 0,
-              padding: "0 20px 16px",
-              display: "flex", flexDirection: "column", gap: 14,
-            }}>
-              {TAB_ITEMS.map((tab, i) => {
-                const isActive = activeTab === i
-                return (
-                  <div
-                    key={tab.label}
-                    style={{
-                      display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 14,
-                      animation: "slideInRight 360ms cubic-bezier(0.34, 1.56, 0.64, 1) both",
-                      animationDelay: `${i * 55}ms`,
-                    }}
-                  >
-                    <span style={{
-                      fontSize: 17, fontWeight: 700, letterSpacing: -0.3,
-                      color: isActive ? C.text : C.textSub,
-                    }}>
-                      {tab.label}
-                    </span>
-                    <button
-                      onClick={() => { setActiveTab(i); setMenuOpen(false) }}
-                      style={{
-                        width: 52, height: 52, borderRadius: 14, flexShrink: 0,
-                        background: isActive ? C.text : C.elevated,
-                        border: isActive ? "none" : `0.5px solid ${C.border}`,
-                        cursor: "pointer", fontSize: 26,
-                        display: "flex", alignItems: "center", justifyContent: "center",
-                        boxShadow: isActive ? "0 4px 16px rgba(255,255,255,0.2)" : "0 2px 8px rgba(0,0,0,0.4)",
-                      }}
-                    >
-                      {tab.emoji}
-                    </button>
-                  </div>
-                )
-              })}
+          <div className="flex h-7 items-center gap-4">
+            <div
+              role="progressbar"
+              aria-label="Career XP"
+              aria-valuemin={0}
+              aria-valuemax={XP_MAX}
+              aria-valuenow={XP}
+              className="h-1 flex-1 rounded-full bg-progress-track"
+            >
+              <div className="h-full rounded-full bg-gradient-progress" style={{ width: `${(XP / XP_MAX) * 100}%` }} />
             </div>
-          )}
-
-          {/* Bottom bar: active tab label + open/close button */}
-          <div style={{ padding: "8px 20px 28px", display: "flex", gap: 12 }}>
-            {menuOpen ? (
-              /* Close button */
-              <button
-                onClick={() => setMenuOpen(false)}
-                style={{
-                  flex: 1, height: 58, borderRadius: 30,
-                  background: C.elevated, border: `0.5px solid ${C.border}`,
-                  color: C.text, fontSize: 22, cursor: "pointer",
-                  animation: "slideInRight 360ms cubic-bezier(0.34, 1.56, 0.64, 1) both",
-                  animationDelay: `${TAB_ITEMS.length * 55}ms`,
-                }}
-              >
-                ✕
-              </button>
-            ) : (
-              /* Collapsed: show active section + open button */
-              <>
-                <button
-                  onClick={() => setMenuOpen(true)}
-                  style={{
-                    flex: 1, height: 58, borderRadius: 30,
-                    background: C.elevated, border: `0.5px solid ${C.border}`,
-                    color: C.text, fontSize: 15, fontWeight: 600, cursor: "pointer",
-                    display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-                  }}
-                >
-                  <span style={{ fontSize: 22 }}>{TAB_ITEMS[activeTab].emoji}</span>
-                  <span>{TAB_ITEMS[activeTab].label}</span>
-                </button>
-                <button
-                  onClick={() => setMenuOpen(true)}
-                  style={{
-                    width: 58, height: 58, borderRadius: 30,
-                    background: C.elevated, border: `0.5px solid ${C.border}`,
-                    color: C.textSub, fontSize: 20, cursor: "pointer",
-                  }}
-                >
-                  ···
-                </button>
-              </>
-            )}
+            <span className="text-13 font-medium text-fg-secondary">
+              {XP} / {XP_MAX} XP
+            </span>
           </div>
+
+          <p className="flex h-6 w-fit items-center gap-1.5 rounded-8 bg-gradient-success-chip px-2 text-13 font-medium text-fg-success">
+            <Image src="/helabet/icons/arrow-up.webp" alt="" width={148} height={160} sizes="16px" className="h-3 w-auto" />
+            Top 12% of runners this week
+          </p>
+        </section>
+
+        {/* Promo tiles: лента выходит за поля экрана */}
+        <div className="-mx-gutter flex snap-x snap-mandatory scroll-px-gutter gap-3 overflow-x-auto px-gutter">
+          {TILES.map((tile) => (
+            <button
+              key={tile.title}
+              type="button"
+              className={`relative h-25 w-45 shrink-0 snap-start overflow-hidden rounded-card text-left ${tile.fill}`}
+            >
+              <Image
+                src={tile.src}
+                alt=""
+                width={1672}
+                height={941}
+                sizes="290px"
+                className="absolute max-w-none"
+                style={{ width: "160.5%", left: "-27.5%", top: tile.top, height: "auto" }}
+              />
+              <span className="absolute inset-x-0 bottom-0 h-9 bg-scrim-bottom backdrop-blur-glass-md mask-t-from-40%" />
+              <span className="absolute bottom-3 left-3 flex flex-col gap-0.5">
+                <span className="text-15 font-bold text-fg-primary">{tile.title}</span>
+                <span className="flex items-center gap-1 text-11 text-fg-primary">
+                  {tile.caption}
+                  <Image src="/helabet/icons/coin.webp" alt="" width={160} height={160} sizes="16px" className="size-3" />
+                </span>
+              </span>
+            </button>
+          ))}
         </div>
-
-        <style>{`
-          @keyframes slideInRight {
-            from { transform: translateX(70px); opacity: 0; }
-            to   { transform: translateX(0);    opacity: 1; }
-          }
-        `}</style>
-
       </div>
-    </div>
+
+      {/* Tab bar */}
+      <nav aria-label="Main" className="fixed inset-x-0 bottom-0 z-10 flex justify-center pb-safe-bottom">
+        <div aria-hidden className="absolute inset-x-0 bottom-0 h-20 bg-scrim-bottom backdrop-blur-glass-md mask-t-from-40%" />
+        <div className="relative mb-5 flex w-fit items-center gap-2 rounded-full border border-line-default bg-surface-tabbar p-1 backdrop-blur-glass-sm">
+          {TABS.map((tab) => (
+            <button
+              key={tab.label}
+              type="button"
+              aria-current={tab.active ? "page" : undefined}
+              className={`flex h-16 flex-col items-center justify-center gap-1 rounded-full px-1.5 py-2.5 text-12 font-semibold text-fg-primary ${
+                tab.active ? "w-21 bg-surface-tab-active" : "w-19"
+              }`}
+            >
+              <Image src={tab.icon} alt="" width={tab.w} height={tab.h} sizes="32px" className="h-6 w-auto" />
+              {tab.label}
+            </button>
+          ))}
+        </div>
+      </nav>
+    </main>
   )
 }

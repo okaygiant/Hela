@@ -1,0 +1,97 @@
+/* ============================================================
+   tokens-tailwind.css — как токены из tokens.css называются в Tailwind v4.
+   Здесь НЕТ значений, только «имя класса → токен». Значения живут в tokens.css.
+   Добавляя токен в tokens.css, регистрируй его здесь и в таблице ui-pipeline/UI_RULES.md.
+   Модификаторы прозрачности (bg-surface-app/50) не работают: значения задаются через var().
+   ============================================================ */
+
+@theme inline {
+  /* Поверхности: bg-surface-* */
+  --color-surface-app: var(--bg-app);
+  --color-surface-hero: var(--bg-hero);
+  --color-surface-hero-deep: var(--bg-hero-deep);
+  --color-surface-marquee: var(--bg-marquee);
+  --color-surface-marquee-promo: var(--bg-marquee-promo);
+  --color-surface-glass: var(--surface-glass);
+  --color-surface-glass-strong: var(--surface-glass-strong);
+  --color-surface-tabbar: var(--surface-tabbar-tint);
+  --color-surface-tab-active: var(--surface-tab-active);
+
+  /* Текст: text-fg-* */
+  --color-fg-primary: var(--text-primary);
+  --color-fg-secondary: var(--text-secondary);
+  --color-fg-accent: var(--text-accent);
+  --color-fg-success: var(--text-success);
+
+  /* Действия и акценты */
+  --color-action-primary: var(--action-primary);
+  --color-action-promo: var(--action-promo);
+  --color-accent-gold: var(--accent-gold);
+  --color-glow-purple: var(--glow-purple);
+
+  /* Состояния элементов */
+  --color-star-inactive: var(--star-inactive);
+  --color-dot-inactive: var(--dot-inactive);
+  --color-dot-active: var(--dot-active);
+  --color-progress-track: var(--progress-track);
+
+  /* Границы: border-line-* */
+  --color-line-default: var(--border-default);
+  --color-line-strong: var(--border-strong);
+  --color-line-accent: var(--border-accent);
+
+  /* Радиусы: rounded-4 / -8 / -card / -32 (пилюля и круг: встроенный rounded-full) */
+  --radius-4: var(--round-4);
+  --radius-8: var(--round-8);
+  --radius-card: var(--round-card);
+  --radius-32: var(--round-32);
+
+  /* Размеры компонентов и safe area: h-button, h-chip, px-gutter, pt-safe-top, min-h-app */
+  --spacing-button: var(--button-h);
+  --spacing-chip: var(--chip-h);
+  --spacing-gutter: var(--screen-gutter);
+  --spacing-safe-top: var(--safe-top);
+  --spacing-safe-bottom: var(--safe-bottom);
+  --spacing-safe-left: var(--safe-left);
+  --spacing-safe-right: var(--safe-right);
+  --spacing-app: var(--app-height);
+
+  /* Типографика: text-11 ... text-64, tracking-caps, leading-auto (line-height: normal, как «auto» в Figma) */
+  --text-11: var(--fs-11);
+  --text-12: var(--fs-12);
+  --text-13: var(--fs-13);
+  --text-14: var(--fs-14);
+  --text-15: var(--fs-15);
+  --text-16: var(--fs-16);
+  --text-17: var(--fs-17);
+  --text-24: var(--fs-24);
+  --text-32: var(--fs-32);
+  --text-34: var(--fs-34);
+  --text-64: var(--fs-64);
+  --tracking-caps: var(--ls-caps);
+  --leading-auto: var(--lh-auto);
+
+  /* Размытие: backdrop-blur-glass-*, blur-glow-* */
+  --blur-glass-sm: var(--glass-blur-sm);
+  --blur-glass-md: var(--glass-blur-md);
+  --blur-glass-lg: var(--glass-blur-lg);
+  --blur-glow-sm: var(--glow-blur-sm);
+  --blur-glow-md: var(--glow-blur-md);
+  --blur-glow-lg: var(--glow-blur-lg);
+}
+
+/* Градиенты (не цвета, поэтому отдельными утилитами) */
+@utility bg-gradient-card { background-image: var(--gradient-card); }
+@utility bg-gradient-gold { background-image: var(--gradient-gold); }
+@utility bg-gradient-star { background-image: var(--gradient-star); }
+@utility bg-gradient-progress { background-image: var(--gradient-progress); }
+@utility bg-gradient-success-chip { background-image: var(--gradient-success-chip); }
+@utility bg-gradient-tile-green { background-image: var(--gradient-tile-green); }
+@utility bg-gradient-tile-gold { background-image: var(--gradient-tile-gold); }
+@utility bg-scrim-bottom { background-image: var(--scrim-bottom); }
+@utility text-gradient-heading {
+  background-image: var(--gradient-heading);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}

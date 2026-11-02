@@ -90,3 +90,7 @@ Three patterns are in use across routes:
 ## Next.js version note
 
 This project runs Next.js 16 with breaking changes from earlier versions. Before writing routing, data-fetching, or config code, check `node_modules/next/dist/docs/` for the current API (as noted in `AGENTS.md`).
+
+## UI rules
+
+Before any UI work, read `ui-pipeline/UI_RULES.md` (tokens in `hela-app/app/tokens.css`, patterns in `ui-pipeline/ui-kit.md`, screen references in `ui-pipeline/refs/`).
