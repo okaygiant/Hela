@@ -10,7 +10,6 @@ export default function Onboarding3() {
   return (
     <OnboardingFrame
       hero={<OnboardingHero mascot="phone" />}
-      zone="h-65"
       step={3}
       actions={
         <>

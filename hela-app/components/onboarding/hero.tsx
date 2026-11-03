@@ -22,8 +22,18 @@ function Laurel({ side }: { side: "left" | "right" }) {
 
 export function OnboardingHero({ mascot }: { mascot: "backpack" | "phone" }) {
   return (
-    <section className="relative h-100 bg-surface-hero before:absolute before:inset-x-0 before:bottom-full before:h-10 before:bg-surface-hero">
+    <section className="relative min-h-90 shrink basis-100 bg-surface-hero before:absolute before:inset-x-0 before:bottom-full before:h-10 before:bg-surface-hero">
       <div className="absolute inset-0 overflow-hidden">
+        <Image
+          src="/onboarding/logo.svg"
+          alt="hela.bet"
+          width={60}
+          height={13}
+          className="absolute top-10 left-1/2 z-10 h-auto w-15 -translate-x-1/2"
+        />
+
+        {/* Всё остальное привязано к низу и держит размер макета (400): на низком экране hero сжимается, обрезается верх, лого остаётся сверху */}
+        <div className="absolute inset-x-0 bottom-0 h-100">
         {/* Свечение за маскотом: в макете два одинаковых слоя */}
         <div aria-hidden className="absolute inset-x-0 top-35 flex h-20 items-center justify-center">
           {[0, 1].map((i) => (
@@ -37,14 +47,6 @@ export function OnboardingHero({ mascot }: { mascot: "backpack" | "phone" }) {
             />
           ))}
         </div>
-
-        <Image
-          src="/onboarding/logo.svg"
-          alt="hela.bet"
-          width={60}
-          height={13}
-          className="absolute top-10 left-1/2 h-auto w-15 -translate-x-1/2"
-        />
 
         {mascot === "backpack" && (
           <div aria-hidden className="absolute top-28 left-1/2 ml-1.5 flex -translate-x-1/2 items-start gap-5">
@@ -105,6 +107,7 @@ export function OnboardingHero({ mascot }: { mascot: "backpack" | "phone" }) {
               </div>
             ))}
           </div>
+        </div>
         </div>
       </div>
     </section>
