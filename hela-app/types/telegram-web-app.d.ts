@@ -28,6 +28,15 @@ declare global {
     destructive_text_color?: string
   }
 
+  /** Нативная кнопка «назад» в шапке Telegram. Bot API 6.1+ */
+  interface TelegramBackButton {
+    isVisible: boolean
+    show(): void
+    hide(): void
+    onClick(handler: () => void): void
+    offClick(handler: () => void): void
+  }
+
   interface TelegramWebApp {
     initData: string
     initDataUnsafe: Record<string, unknown>
@@ -44,6 +53,8 @@ declare global {
     safeAreaInset?: TelegramInsets
     /** Bot API 8.0+ */
     contentSafeAreaInset?: TelegramInsets
+    /** Bot API 6.1+ */
+    BackButton?: TelegramBackButton
     ready(): void
     expand(): void
     close(): void
