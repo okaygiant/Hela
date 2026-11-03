@@ -44,6 +44,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
+      suppressHydrationWarning // telegram-web-app.js дописывает style/атрибуты в <html> до гидратации
       className={cn("h-full", "antialiased", geistSans.variable, geistMono.variable, "font-sans", plusJakarta.variable)}
     >
       <body className="min-h-full flex flex-col">

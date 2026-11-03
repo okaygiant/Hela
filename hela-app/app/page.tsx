@@ -1,4 +1,9 @@
 import Image from "next/image"
+import { CtaButton } from "@/components/cta-button"
+import { LanguageButton } from "@/components/language-button"
+import { MenuButton } from "@/components/menu-button"
+import { PRESS } from "@/components/press"
+import { TabBar } from "@/components/tab-bar"
 
 // Источник: Figma «DE» → Home (498:2354), референс ui-pipeline/refs/01-home.png.
 // Правила: ui-pipeline/UI_RULES.md. Только токены и классы из tokens-tailwind.css.
@@ -7,12 +12,6 @@ const STREAK_DAYS = 3
 const WEEK = ["M", "T", "W", "T", "F", "S", "S"]
 const XP = 78
 const XP_MAX = 200
-
-const TABS = [
-  { label: "Work", icon: "/helabet/icons/tab-work.webp", w: 160, h: 141, active: true },
-  { label: "Bet", icon: "/helabet/icons/tab-bet.webp", w: 160, h: 157, active: false },
-  { label: "Play", icon: "/helabet/icons/tab-play.webp", w: 160, h: 160, active: false },
-]
 
 // Кроп картинки плитки (в процентах от плитки), снят с макета.
 const TILES = [
@@ -46,16 +45,6 @@ function ChevronRight() {
   return (
     <svg aria-hidden viewBox="0 0 16 16" fill="none" className="size-4 shrink-0 text-fg-primary">
       <path d="M6 3l5 5-5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  )
-}
-
-function MenuIcon() {
-  return (
-    <svg aria-hidden viewBox="0 0 16 16" fill="currentColor" className="size-4">
-      <rect x="2" y="3" width="8" height="1.3" rx="0.65" />
-      <rect x="2" y="7.4" width="12" height="1.3" rx="0.65" />
-      <rect x="2" y="11.8" width="12" height="1.3" rx="0.65" />
     </svg>
   )
 }
@@ -97,22 +86,8 @@ export default function Home() {
           </Chip>
 
           <div className="flex flex-1 items-center justify-end gap-2">
-            <button
-              type="button"
-              aria-label="Language: Brazil"
-              className="relative flex size-chip items-center justify-center rounded-full bg-surface-glass after:absolute after:-inset-2"
-            >
-              <span aria-hidden className="text-16 leading-none">
-                🇧🇷
-              </span>
-            </button>
-            <button
-              type="button"
-              aria-label="Menu"
-              className="relative flex size-chip items-center justify-center rounded-full bg-surface-glass text-fg-primary after:absolute after:-inset-2"
-            >
-              <MenuIcon />
-            </button>
+            <LanguageButton />
+            <MenuButton />
           </div>
         </header>
 
@@ -140,12 +115,7 @@ export default function Home() {
         </section>
 
         {/* CTA */}
-        <button
-          type="button"
-          className="h-button w-full rounded-full bg-action-primary px-5 text-17 font-medium text-fg-primary"
-        >
-          Activate 2X Boost
-        </button>
+        <CtaButton>Activate 2X Boost</CtaButton>
 
         {/* Streak Calendar */}
         <section className="relative isolate flex flex-col gap-4 overflow-hidden rounded-card bg-surface-glass-strong p-4">
@@ -222,7 +192,7 @@ export default function Home() {
             <button
               key={tile.title}
               type="button"
-              className={`relative h-25 w-45 shrink-0 snap-start overflow-hidden rounded-card text-left ${tile.fill}`}
+              className={`${PRESS} relative h-25 w-45 shrink-0 snap-start overflow-hidden rounded-card text-left ${tile.fill}`}
             >
               <Image
                 src={tile.src}
@@ -246,25 +216,7 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Tab bar */}
-      <nav aria-label="Main" className="fixed inset-x-0 bottom-0 z-10 flex justify-center pb-safe-bottom">
-        <div aria-hidden className="absolute inset-x-0 bottom-0 h-20 bg-scrim-bottom backdrop-blur-glass-md mask-t-from-40%" />
-        <div className="relative mb-5 flex w-fit items-center gap-2 rounded-full border border-line-default bg-surface-tabbar p-1 backdrop-blur-glass-sm">
-          {TABS.map((tab) => (
-            <button
-              key={tab.label}
-              type="button"
-              aria-current={tab.active ? "page" : undefined}
-              className={`flex h-16 flex-col items-center justify-center gap-1 rounded-full px-1.5 py-2.5 text-12 font-semibold text-fg-primary ${
-                tab.active ? "w-21 bg-surface-tab-active" : "w-19"
-              }`}
-            >
-              <Image src={tab.icon} alt="" width={tab.w} height={tab.h} sizes="32px" className="h-6 w-auto" />
-              {tab.label}
-            </button>
-          ))}
-        </div>
-      </nav>
+      <TabBar />
     </main>
   )
 }
