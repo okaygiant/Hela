@@ -48,8 +48,8 @@ export function OnboardingHero({ mascot }: { mascot: "backpack" | "phone" }) {
 
         {mascot === "backpack" && (
           <div aria-hidden className="absolute top-28 left-1/2 ml-1.5 flex -translate-x-1/2 items-start gap-5">
-            <Image src="/onboarding/sparkle.png" alt="" width={22} height={20} className="h-5 w-auto rotate-180" />
-            <Image src="/onboarding/sparkle.png" alt="" width={9} height={8} className="mt-2.5 h-2 w-auto" />
+            <Image src="/onboarding/sparkle.webp" alt="" width={22} height={20} className="h-5 w-auto rotate-180" />
+            <Image src="/onboarding/sparkle.webp" alt="" width={9} height={8} className="mt-2.5 h-2 w-auto" />
           </div>
         )}
 
@@ -60,7 +60,7 @@ export function OnboardingHero({ mascot }: { mascot: "backpack" | "phone" }) {
           {mascot === "backpack" ? (
             <div aria-hidden className="absolute top-1/2 left-1/2 size-45 -translate-x-1/2 -translate-y-1/2">
               <Image
-                src="/onboarding/mascot-backpack.png"
+                src="/onboarding/mascot-backpack.webp"
                 alt=""
                 fill
                 preload
@@ -73,7 +73,7 @@ export function OnboardingHero({ mascot }: { mascot: "backpack" | "phone" }) {
               {/* Кадрирование как в макете: картинка шире блока на 14% и сдвинута влево на 4,3% */}
               <div className="absolute inset-y-0" style={{ width: "114.11%", left: "-4.32%" }}>
                 <Image
-                  src="/onboarding/mascot-phone.png"
+                  src="/onboarding/mascot-phone.webp"
                   alt=""
                   fill
                   preload
