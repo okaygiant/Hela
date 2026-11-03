@@ -18,12 +18,12 @@ export function OnboardingFrame({
     <main className="flex h-app flex-col bg-surface-app pl-safe-left pr-safe-right pt-safe-top pb-safe-bottom text-fg-primary leading-auto">
       <div className="mx-auto flex min-h-0 w-full max-w-md flex-1 flex-col">
         {hero}
-        <div className="flex flex-1 flex-col px-gutter pb-6">
+        <div className="flex flex-1 flex-col px-gutter pb-3">
           <div>{children}</div>
           <div className="mt-auto pt-6">
             <Pagination step={step} />
           </div>
-          <div className="flex min-h-30 flex-col pt-6">{actions}</div>
+          <div className="flex min-h-28 flex-col pt-4">{actions}</div>
         </div>
       </div>
     </main>
