@@ -55,6 +55,9 @@ declare global {
     contentSafeAreaInset?: TelegramInsets
     /** Bot API 6.1+ */
     BackButton?: TelegramBackButton
+    isVersionAtLeast?(version: string): boolean
+    /** Bot API 6.9+: просит у пользователя разрешение, чтобы бот мог писать ему сообщения */
+    requestWriteAccess?(callback?: (allowed: boolean) => void): void
     ready(): void
     expand(): void
     close(): void
