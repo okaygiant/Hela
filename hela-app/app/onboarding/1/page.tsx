@@ -7,7 +7,6 @@ export default function Onboarding1() {
   return (
     <OnboardingFrame
       hero={<OnboardingHero mascot="backpack" />}
-      zone="h-65"
       step={1}
       actions={<CtaLink href="/onboarding/2">Get Started</CtaLink>}
     >

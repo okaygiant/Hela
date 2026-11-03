@@ -12,7 +12,7 @@ const STEPS = [
 
 export default function Onboarding2() {
   return (
-    <OnboardingFrame zone="h-165" step={2} actions={<CtaLink href="/onboarding/3">Sounds good</CtaLink>}>
+    <OnboardingFrame step={2} actions={<CtaLink href="/onboarding/3">Sounds good</CtaLink>}>
       <TelegramBackButton href="/onboarding/1" />
       <div className="flex flex-col gap-1.5 pt-10">
         <h1 className="text-34 font-bold">How Hela works</h1>
