@@ -21,7 +21,7 @@ export function CtaButton({ children, loading = false, disabled = false, variant
       type={type}
       disabled={disabled || loading}
       aria-busy={loading || undefined}
-      className={`${PRESS} flex h-button w-full items-center justify-center rounded-full ${FILL[variant]} px-5 text-17 font-medium text-fg-primary disabled:bg-surface-glass-strong disabled:text-fg-secondary`}
+      className={`${PRESS} flex h-button w-full items-center justify-center rounded-full ${FILL[variant]} shadow-glass-button px-5 text-17 font-medium text-fg-primary disabled:bg-surface-glass-strong disabled:text-fg-secondary disabled:shadow-none`}
       {...rest}
     >
       {loading ? (
@@ -41,7 +41,7 @@ export function CtaLink({ href, children, variant = "primary" }: { href: string;
   return (
     <Link
       href={href}
-      className={`${PRESS} flex h-button w-full items-center justify-center rounded-full ${FILL[variant]} px-5 text-17 font-medium text-fg-primary`}
+      className={`${PRESS} flex h-button w-full items-center justify-center rounded-full ${FILL[variant]} shadow-glass-button px-5 text-17 font-medium text-fg-primary`}
     >
       {children}
     </Link>
