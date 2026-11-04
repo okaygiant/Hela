@@ -195,7 +195,7 @@ export function TabBar() {
           <button
             type="button"
             onClick={() => panelStore.close()}
-            className={`${PRESS} flex h-button w-full items-center justify-center rounded-full bg-surface-glass text-17 font-medium text-fg-primary`}
+            className={`${PRESS} flex h-button w-full items-center justify-center rounded-full bg-surface-glass shadow-glass-button text-17 font-medium text-fg-primary`}
           >
             Close
           </button>

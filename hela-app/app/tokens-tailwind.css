@@ -89,6 +89,7 @@
 @utility bg-gradient-tile-green { background-image: var(--gradient-tile-green); }
 @utility bg-gradient-tile-gold { background-image: var(--gradient-tile-gold); }
 @utility bg-scrim-bottom { background-image: var(--scrim-bottom); }
+@utility shadow-glass-button { box-shadow: var(--shadow-glass-button); }
 @utility text-gradient-heading {
   background-image: var(--gradient-heading);
   -webkit-background-clip: text;
