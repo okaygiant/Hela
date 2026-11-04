@@ -17,8 +17,9 @@ export default function WaitingForShift() {
         <BackgroundVideo src="/shift/waiting.mp4" poster="/shift/waiting-poster.webp" />
       </div>
 
-      {/* Скрим под текстом, плавный край блюра */}
-      <div aria-hidden className="absolute inset-x-0 bottom-0 -z-10 h-74 bg-scrim-bottom backdrop-blur-glass-sm mask-t-from-40%" />
+      {/* Progressive blur: два слоя, чем ниже, тем плотнее (10 px по всей высоте скрима и 25 px у самого низа, как в макете) + затемнение */}
+      <div aria-hidden className="absolute inset-x-0 bottom-0 -z-10 h-74 bg-scrim-bottom backdrop-blur-glass-md mask-t-from-40%" />
+      <div aria-hidden className="absolute inset-x-0 bottom-0 -z-10 h-48 backdrop-blur-glass-lg mask-t-from-40%" />
 
       <div className="flex flex-col items-center gap-3 px-gutter pb-8">
         <h1 className="text-gradient-heading text-34 font-bold">Next shift in:</h1>
