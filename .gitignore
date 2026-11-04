@@ -1,2 +1,9 @@
 # Локальные настройки Claude Code (не коммитим)
 .claude/settings.local.json
+
+# Локальные файлы, не для репозитория
+.claude/
+ui-pipeline/preview/
+# Сырые экспорты из Figma (в проекте используются webp из public/onboarding и public/helabet/icons)
+hela-app/public/helabet/*.png
+hela-app/public/helabet/*.svg
